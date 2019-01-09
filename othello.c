@@ -11,13 +11,13 @@ int main(int argc, char *argv[])
         }
     }
     // initializing the board 
-    for (int i = 0; i < argc; i++)
+    for (int i = 0; i < 8; i++)
     {
         for (int j = 0; j < 8; j++)
         {
             board[i][j] = argv[i + 1][j];
         }
     }
-    player = argv[8][0];
+    player = argv[9][0];
     return 0;
 }
