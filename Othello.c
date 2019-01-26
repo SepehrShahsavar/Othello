@@ -1,6 +1,9 @@
 #include <stdio.h>
 void processing_moves(int possible_places[][8], char board[][8], char player); //harja ke +1 gozashtam yani az khune badi check kone dige ghaedatan
-void proper_move(char board[][8], char player, int possible_places[][8]);
+void proper_move(char board[][8], char player, int possible_places[][8] , int *x , int *y);
+void biggest(int copy_of_board[][8] , int *x , int *y);
+
+
 int main(int argc, char *argv[])
 {
     // argv , board , possible_places
@@ -8,7 +11,7 @@ int main(int argc, char *argv[])
     char board[8][8];
     char player;
     int possible_places[8][8];
-    int x, y;
+    int x , y;
     // initializing possible_places to zero
     for (int i = 0; i < 8; i++)
     {
@@ -30,7 +33,10 @@ int main(int argc, char *argv[])
     }
 
     player = argv[9][0];
+
     processing_moves(possible_places, board, player);
+    proper_move(board , player , possible_places , &x , &y) ;
+
     for (int i = 0; i < 8; ++i)
     {
         // putchar('@') ;
@@ -46,6 +52,7 @@ int main(int argc, char *argv[])
         printf("\n");
     }
     return 0;
+
 }
 
 void processing_moves(int possible_places[][8], char board[][8], char player)
@@ -198,21 +205,42 @@ void proper_move(char board[][8], char player, int possible_places[][8], int *x,
                         {1.33, -0.04, 0.51, 0.07, 0.07, 0.51, -0.04, 1.33},
                         {-4.12, -1.81, -0.08, -0.27, -0.27, -0.08, -1.81, -4.12},
                         {16.16, -3.03, 0.99, 0.43, 0.43, 0.99, -3.03, 16.16}};
-    int copy_of_board[8][8][1];
+
+    //jahaye dorosto vase positione alan darim
+
+    int copy_of_board[8][8];
+
     for (int i = 0; i < 8; i++)
     {
         for (int j = 0; j < 8; j++)
         {
             if (possible_places[i][j] == 0)
             {
-                copy_of_board[i][j][0] = -1000000;
+                copy_of_board[i][j] = -100;
             }
             else if (possible_places[i][j] == 1)
             {
-                copy_of_board[i][j][0] = weight[i][j];
+                copy_of_board[i][j] = weight[i][j];
             }
         }
     }
-    sort(copy_of_board);
-    find(weight, copy_of_board[0][0][0], x, y, possible_places);
+    biggest(copy_of_board , x , y);
+}
+
+
+void sort(int copy_of_board[][8], int *x , int *y)
+{
+    int biggest = copy_of_board[0][0];
+
+    for(int i=0 ; i<8 ; ++i)
+        for(int j=0 ; j<8 ; ++j)
+                if(copy_of_board[i][j] > biggest)
+                    {
+                        if(copy_of_board[i][j] == -100)
+                            continue ;
+
+                        biggest = copy_of_board[i][j] ;
+                        *x = i ;
+                        *y = j ;
+                    }
 }
